@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
-use App\Minutes;
+use App\EraConverter;
 
-$minutes = filter_input(INPUT_POST, 'time');
+$era = filter_input(INPUT_POST, 'era', FILTER_VALIDATE_INT);
+$year = filter_input(INPUT_POST, 'year', FILTER_VALIDATE_INT);
+
 try {
-    $minutesObj = new Minutes($minutes);
-    $seconds = $minutesObj->toSeconds()->value();
+    $converter = new EraConverter();
+    $convertedYear = $converter->warekiToGregorian($era, $year);
 } catch (\Exception $e) {
     session_start();
     $_SESSION['errorMessage'] = $e->getMessage();
@@ -15,9 +17,6 @@ try {
 ?>
 
 <body>
-
-  <h1><?php echo $seconds; ?></h1>
-  
+  <h1><?php echo $convertedYear; ?></h1>
   <a href="./index.php">Top画面へ</a>
-
 </body>
