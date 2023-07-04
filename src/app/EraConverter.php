@@ -1,26 +1,34 @@
 <?php
 namespace App;
+use App\Era;
+use PDO;
+use Exception;
 
 class EraConverter
 {
-    public function warekiToGregorian($era, $year)
-    {
-        $eras = array(
-            array('year' => 1912, 'name' => '大正'),
-            array('year' => 1926, 'name' => '昭和'),
-            array('year' => 1989, 'name' => '平成'),
-            array('year' => 2018, 'name' => '令和'),
-        );
+    private $eras;
 
-        if (!isset($eras[$era])) {
-            throw new \Exception('無効な和暦が選択されました。');
+    public function __construct()
+    {
+        $this->eras = [
+            new Era(1912, '大正'),
+            new Era(1926, '昭和'),
+            new Era(1989, '平成'),
+            new Era(2018, '令和'),
+        ];
+    }
+
+    public function warekiToGregorian(int $era, int $year): string
+    {
+        if (!isset($this->eras[$era])) {
+            throw new Exception('無効な和暦が選択されました。');
         }
 
-        $baseYear = $eras[$era]['year'];
-        $eraName = $eras[$era]['name'];
+        $baseYear = $this->eras[$era]->getYear();
+        $eraName = $this->eras[$era]->getName();
 
         if ($year < 1) {
-            throw new \Exception('無効な年が入力されました。');
+            throw new Exception('無効な年が入力されました。');
         }
 
         $gregorianYear = $baseYear + $year - 1;
@@ -28,4 +36,5 @@ class EraConverter
         return $gregorianYear . '年 (' . $eraName . ')';
     }
 }
+
 ?>
