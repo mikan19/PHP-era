@@ -1,11 +1,12 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
-use App\Minutes;
+use App\Reiwa;
 
-$minutes = filter_input(INPUT_POST, 'time');
+
+$reiwa = filter_input(INPUT_POST, 'time');
 try {
-    $minutesObj = new Minutes($minutes);
-    $seconds = $minutesObj->toSeconds()->value();
+    $reiwaObj = new Reiwa($reiwa);
+    $ad = $reiwaObj->toAD()->value();
 } catch (\Exception $e) {
     session_start();
     $_SESSION['errorMessage'] = $e->getMessage();
@@ -16,8 +17,7 @@ try {
 
 <body>
 
-  <h1><?php echo $seconds; ?></h1>
+  <h1><?php echo $ad; ?></h1>
   
   <a href="./index.php">Top画面へ</a>
-
 </body>
